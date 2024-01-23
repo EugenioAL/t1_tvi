@@ -39,17 +39,15 @@ MAX_VAL = 255
 
 imOut = "output"
 
-def questao1(path):
-    image = cv2.imread(path)
-    dim = image.shape
+
+def questao1(image,dim):
 
     if image is None:
         print("Imagem não encontrada!")
+        return 0
     else:
         image_mat = np.array(image)
     numVal = 0
-
-    print(image_mat[0][0])
     while(numVal == 0):
         print('Entre com um valor maior que -256 e menor que 256: ')
         val = input()
@@ -73,14 +71,24 @@ def questao1(path):
                     image_mat[i][j][k] = 0
                 else:
                     image_mat[i][j][k] = temp
-
-    print(image_mat[0][0])
     cv2.imwrite(imOut+'1.jpg',image_mat)
 
 
 
-def questao2():
-    return 0
+def questao2(image,dim):
+    if image is None:
+        print("Imagem não encontrada!")
+        return 0
+    else:
+        image_mat = np.array(image)
+
+    for i in range(dim[0]):
+        for j in range(dim[1]):
+            for k in range(dim[2]):
+                image_mat[i][j][k] = MAX_VAL - image_mat[i][j][k]
+                
+    cv2.imwrite(imOut+'2.jpg',image_mat)
+
 
 def questao3():
     return 0
@@ -97,9 +105,13 @@ def questao6():
 def questao7():
     return 0
 
+def questao8():
+    return 0
+
 def questao9():
     a = 11
-    path_image = 'img1.jpg'
+    image = cv2.imread('img1.jpg')
+    dim = image.shape
     while(a!='0'):
         print('Entre com o indice da questao:')
         print('\t1 - Questao 01')
@@ -116,28 +128,28 @@ def questao9():
             print("Fim do Programa.")
 
         elif a == '1':
-            questao1(path_image)
+            questao1(image,dim)
 
         elif a == '2':
-            questao2(path_image)
+            questao2(image,dim)
             
         elif a == '3':
-            questao3(path_image)
+            questao3()
 
         elif a == '4':
-            questao4(path_image)
+            questao4()
         
         elif a == '5':
-            questao5(path_image)
+            questao5()
 
         elif a == '6':
-            questao6(path_image)
+            questao6()
         
         elif a == '7':
-            questao7(path_image)
+            questao7()
 
         elif a == '8':
-            questao8(path_image)
+            questao8()
 
         else:
             print("Opção invalida!")
