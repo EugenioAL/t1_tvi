@@ -39,6 +39,25 @@ MAX_VAL = 255
 
 imOut = "output"
 
+def createArray(lenght):
+    vetor = []
+    for i in range(lenght):
+        vetor.append([0,0,0])
+    return vetor
+
+def writeArray(name, array):
+    with open(name,'w') as file:
+        file.write(','.join(map(str, array)))
+
+def grayscale(mat,dim):
+    for i in range(dim[0]):
+        for j in range(dim[1]):
+            temp=mat[i][j].sum()
+            for k in range(dim[2]):
+                mat[i][j][k] = temp/3
+    return mat
+
+    
 
 def questao1(image,dim):
 
@@ -90,14 +109,60 @@ def questao2(image,dim):
     cv2.imwrite(imOut+'2.jpg',image_mat)
 
 
-def questao3():
-    return 0
+def questao3(image,dim):
+    vetor = createArray(MAX_VAL+1)
+    if image is None:
+        print("Imagem não encontrada!")
+        return 0
+    else:
+        image_mat = np.array(image)
 
-def questao4():
-    return 0
+    for i in range(dim[0]):
+        for j in range(dim[1]):
+            for k in range(dim[2]):
+                vetor[image_mat[i][j][k]][k]+=1       
+    writeArray('output3.txt',vetor)
 
-def questao5():
-    return 0
+def questao4(image,dim):
+    hei20 = int(dim[1]*0.2)
+    wei20 = int(dim[0]*0.2)
+    hei50 = int(dim[1]*0.5)
+    wei50 = int(dim[0]*0.5)
+
+    histograma =[]
+    num_particoes = 5
+    for i in range(num_particoes):
+        histograma.append(createArray(MAX_VAL+1))
+
+    if image is None:
+        print("Imagem não encontrada!")
+        return 0
+    else:
+        image_mat = np.array(image)
+    for i in range(dim[0]):
+        for j in range(dim[1]):
+            for k in range(dim[2]):
+                if (j < hei50 and i < wei20) or (j < hei20 and i < wei50):
+                    histograma[0][image_mat[i][j][k]][k]+=1
+                elif (j > hei50 and i < wei20) or (j > dim[1]-hei20 and i < wei50):
+                    histograma[1][image_mat[i][j][k]][k]+=1
+                elif (j > hei50 and i > dim[0]-wei20) or (j > dim[1]-hei20 and i > wei50):
+                    histograma[2][image_mat[i][j][k]][k]+=1
+                elif (j < hei50 and i > dim[0]-wei20) or (j < hei20 and i > wei50):
+                    histograma[3][image_mat[i][j][k]][k]+=1               
+                else:
+                    histograma[4][image_mat[i][j][k]][k]+=1
+    writeArray('output4.txt',histograma)
+
+def questao5(image,dim):
+    if image is None:
+        print("Imagem não encontrada!")
+        return 0
+    else:
+        image_mat = np.array(image)
+
+    image_mat = grayscale(image_mat,dim)
+    cv2.imwrite(imOut+'5.jpg',image_mat)
 
 def questao6():
     return 0
@@ -134,13 +199,13 @@ def questao9():
             questao2(image,dim)
             
         elif a == '3':
-            questao3()
+            questao3(image,dim)
 
         elif a == '4':
-            questao4()
+            questao4(image,dim)
         
         elif a == '5':
-            questao5()
+            questao5(image,dim)
 
         elif a == '6':
             questao6()
